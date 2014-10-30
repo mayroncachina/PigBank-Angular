@@ -1,45 +1,40 @@
-<!DOCTYPE html>
-<html ng-app="app">
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
-    <script src="https://code.angularjs.org/1.3.0/angular-route.js"></script>
-    <script src="localstorage.js" type="text/javascript" charset="utf-8" ></script>
-    <script src="app.js"></script>
-    <meta charset=utf-8 />
-    <title>PigBank</title>
-</head>
-<body>
-  <div ng-app="app">
-    <div ng-controller="newCtrl">
-        <h4>{{mensagem}}</h4>
+<div ng-controller="newCtrl">
+
+    <a href='/#/'>Home</a>
+    <hr/>
+
+    <h4>{{mensagem}}</h4>
+    
+    <form ng-submit="gravar()">
         
-        <form ng-submit="gravar()">
-            
-            <p>
-                <label>Estabelecimento</label>
-                <select ng-model="estabelecimento" ng-options="color.name for color in colors" >
-                    <option value="">Select Account</option>
-                </select>
-            </p>
-            <p>
-                <label>Descrição</label>
-                <input type="text" ng-model="descricao" />
-            </p>
-            <p>
-                <label>Data</label>
-                <input type="date" ng-model="date" />
-            </p>
-            <p>
-                <label>Parcelas</label>
-                <input type="number" ng-model="parcelas" required/>
-            </p>        
-            <p>
-                <label>Valor</label>
-                <input type="number" ng-model="valor" step="0.01" required/>
-            </p>
-            <input type="submit" value="Gravar"/>
-        </form>
-    </div>
-</body>
+        <p>
+            <label>Estabelecimento</label>
+            <select ng-model="estabelecimento" ng-options="color.name for color in colors" >
+                <option value="">Select Account</option>
+            </select>
+        </p>
+        <p>
+            <label>Tipo</label>
+            <select ng-model="tipo" ng-options="tipo.name for tipo in tipos" >
+                <option value="">--------</option>
+            </select>
+        </p>
+        <p>
+            <label>Descrição</label>
+            <input type="text" ng-model="descricao" />
+        </p>
+        <p>
+            <label>Data</label>
+            <input type="date" ng-model="date" />
+        </p>
+        <p>
+            <label>Parcelas</label>
+            <input type="number" ng-model="parcelas" required/>
+        </p>        
+        <p>
+            <label>Valor</label>
+            <input type="number" ng-model="valor" step="0.01" required/>
+        </p>
+        <input type="submit" value="Gravar"/>
+    </form>
 </div>
-</html>
