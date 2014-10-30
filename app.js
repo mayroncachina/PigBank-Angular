@@ -2,54 +2,62 @@ var lib = new localStorageDB("pigbank", localStorage);
 
 var app = angular.module('app', ["ngRoute"]);
 
-app.constant('cartoes', {
-	cartoes: ['Banco do Brasil', 'Caixa']
+app.config(function($routeProvider,$httpProvider,$locationProvider){
+
+       $routeProvider.
+
+       when("/",{templateUrl:"home.html"}).
+       when("/new",{templateUrl:"new.html",controller:"newCtrl"});      
+
 });
 
 
-app.config(function($routeProvider) {
-  $routeProvider
-  .when("/welcome", {templateUrl: "index.html", controller: "indexCtrl"})
-  .when("/new", {templateUrl: "new.html", controller: "newCtrl"})
-  .otherwise({ redirectTo: "/welcome"});
+app.service('TitulosService', function(){
+    
+    this.salve = function(scope){
+
+      lib.insert("titulos", {
+        //estabelecimento: scope.estabelecimento.nome, 
+        descricao: scope.descricao, 
+        data: scope.date, 
+        parcelas: scope.parcelas, 
+        valor: scope.valor
+      });
+      lib.commit();
+
+      console.log(lib.query("titulos"))
+
+      //return a.parcelas * a.valor;
+    }
+
+    this.add = function(a) { 
+      return a+a; 
+    };
 });
 
 
-app.service('CalculatorService', function(){
-		    
-    this.soma = function(a) { return a+a; };
-});
-
-
-app.controller('indexCtrl', function($scope, CalculatorService, cartoes) {
+app.controller('indexCtrl', function($scope) {
    $scope.number = 0
-   $scope.doSquare = function(){
-   	$scope.answer = CalculatorService.soma($scope.number);
-   };
 
 });
 
-app.controller('newCtrl', function($scope, cartoes) {
-   $scope.number = 0
+app.controller('newCtrl', function($scope, TitulosService) {
+  $scope.colors = [
+      {name:'BB', vcto:'22', id:0},
+      {name:'CAIXA', vcto:'22', id:1},
+      {name:'ITAU', vcto:'22', id:2},
+    ];
+   
+   $scope.gravar = function(){
+      $scope.mensagem = "INSERIDO COM SUCESSO";
+      TitulosService.salve($scope);
+   }
+
 });
 
 
 if( lib.isNew() ) {
-
-    // create the "books" table
-    lib.createTable("books", ["code", "title", "author", "year", "copies"]);
-
-    // insert some data
-    lib.insert("books", {code: "B001", title: "Phantoms in the brain", author: "Ramachandran", year: 1999, copies: 10});
-    lib.insert("books", {code: "B002", title: "The tell-tale brain", author: "Ramachandran", year: 2011, copies: 10});
-    lib.insert("books", {code: "B003", title: "Freakonomics", author: "Levitt and Dubner", year: 2005, copies: 10});
-    lib.insert("books", {code: "B004", title: "Predictably irrational", author: "Ariely", year: 2008, copies: 10});
-    lib.insert("books", {code: "B005", title: "Tesla: Man out of time", author: "Cheney", year: 2001, copies: 10});
-    lib.insert("books", {code: "B006", title: "Salmon fishing in the Yemen", author: "Torday", year: 2007, copies: 10});
-    lib.insert("books", {code: "B007", title: "The user illusion", author: "Norretranders", year: 1999, copies: 10});
-    lib.insert("books", {code: "B008", title: "Hubble: Window of the universe", author: "Sparrow", year: 2010, copies: 10});
-
-    // commit the database to localStorage
-    // all create/drop/insert/update/delete operations should be committed
+    lib.createTable("titulos", ["estabelecimento", "descricao", "data", "parcelas", "valor"]);
+    lib.insert("titulos", {estabelecimento: "0", descricao: "Teste", data: "20/10/2014", parcelas: 2, valor: 10});
     lib.commit();
 }
